@@ -88,21 +88,11 @@ int main (){
   fir.erase(21);
   std::cout<<"printing fir after using erase(21):\n"<< fir << std::endl;
 
-  /*
-  iter.first = fir.take_head();
-  std::cout<< iter.first->first<<std::endl;
 
-  bst<int, double> cedro;
-  iter = cedro.emplace(5, 0.55555);
-  iter = cedro.emplace(10, 0.55555);  
-  iter = cedro.emplace(9, 0.55555);
-  iter = cedro.emplace(8, 0.55555);
-  iter = cedro.emplace(6, 0.55555);
-  iter = cedro.emplace(7, 0.55555);
-  cedro.erase(5);
-  std::cout<<cedro<<std::endl;
-  iter.first = cedro.take_head();
-  std::cout<< iter.first->first<<std::endl;
-  */
+  fir.erase(14);
+  iter.first = fir.take_head();
+  std::cout<<"printing fir new head after using erase(14):  "<< iter.first->first<<std::endl;
+  std::cout<<"printing fir:\n"<<fir<<std::endl;
+ 
 }
 
