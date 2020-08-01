@@ -457,7 +457,6 @@ void bst<key,value,cmp>::erase_head(){
 
   if(head.get()->right==nullptr && head.get()->left==nullptr){
     head.reset();
-    std::cout<< "first case" << std::endl;
   }
   
 
@@ -473,13 +472,10 @@ void bst<key,value,cmp>::erase_head(){
     else{
 
       iterator H{head.get()};
-
       auto node_successor = (++H).current;  //pointer to node that must become the head
-      auto father = node_successor->upper;   
-
+ 
       if(head.get()->left.get()){
         (head.get()->left)->upper=node_successor; //the upper of left child will point to node successor (that must become the head)
-	std::cout<<"left child assign" << std::endl;
         node_successor->left.reset(head.get()->left.release()); //node successor gain is correct left child 
       }
 
@@ -487,34 +483,32 @@ void bst<key,value,cmp>::erase_head(){
       if(node_successor==head.get()->right.get()){
         head.reset(head.get()->right.release());
         node_successor->upper=nullptr;
-	std::cout<<"second case"<<std::endl;
       }
       //case 2) general case successor is not the right child of the head
       else{
-	std::cout<<"third case"<< std::endl; 
-        //if the successor has a child (which has to be a right child)
-        if (node_successor->right.get()) {
-	  std::cout<< "3.1 case" << std::endl;
-          
-          //we set the father of the right child to the father of the node successor
-          //and we set as left child of the father this node 
-          //for sure node_successor was a left child otherwise we are in the former case 
-          (node_successor->right)->upper = node_successor->upper;
-          father->left.reset(node_successor->right.release());
-        
-        }
+	     auto father_succ = node_successor->upper;
 
-        //set the right child of the node as the right child of the node_successor 
-        node_successor->right.reset(head.get()->right.release());	
-        head.reset(node_successor);
-        (node_successor->right)->upper=node_successor;
-	//(node_successor->upper)->left.reset();  //i need to remove node successor as left child of his previous parent
-	//(node_successor->upper)->left = nullptr;
-	father->left.reset();
+	     if (node_successor->right.get()) {
+	       auto node_app = head.get()->right.release();
+	       (node_successor->right)->upper = father_succ; //right child of successor take his new correct father
+	       head.reset(father_succ->left.release()); // head take the correct node, but father of successor loose his left child
+	       father_succ->left.reset(node_successor->right.release());  //father_succ take his new left child
+	       node_successor->right.reset(node_app);//giving to the new head his correct right child
+	       
+	     }
+
+	     else{
+	       node_successor->right.reset(head.get()->right.release());
+	       head.reset(father_succ->left.release());
+	       //father_succ->left.reset();
+	     }
+	     
+        
+	     (node_successor->right)->upper=node_successor;
 	
-        //set the father of the node successor to be the father of the node_to_erase
-        node_successor->upper=nullptr;
-        //set the child of the father to node successor
+	     //set the father of the node successor to be the father of the node_to_erase
+	     node_successor->upper=nullptr;
+	     //set the child of the father to node successor
         
       } 
     }               
