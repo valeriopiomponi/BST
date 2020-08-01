@@ -1,10 +1,13 @@
 # Binary Search Tree by Valerio Piomponi
 
 ##How to compile and run
+
 To compile and run the program just type "make" on the command line and then "./main.exe". To remove main.exe and recompile use "make clean".
 
 
 ##The code
+
+
 The code is composed by a main.cc file and by three different headers file:
 -In node.hpp the struct node is defined: The struct contains a templated value and three pointer to node (two unique pointer (left and right), and a normal pointer (upper)). Both a copy and a move ctor are defined in order to be able to construct a node with the value and the upper pointer. Left and right pointer are always set as nullptr when the node is constructed.
 
@@ -16,6 +19,8 @@ The code is composed by a main.cc file and by three different headers file:
 
 
 ##Comments
+
+
 In order to check that the program has no memory leaks, I used the command "valgrind --leak-check=full ./main.exe". No leaks were reported.
 
 I wrote the codes alone but helping myself with the code written by my collegues Iuri Macocco and Mattia Ubertini. 
