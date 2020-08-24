@@ -13,13 +13,13 @@
 #include "node.hpp"
 #include "__iterator.hpp"
 
-template<class key, class value, class cmp=std::less<key> >  //std::less is something better than operator <
+template<class key, class value, class cmp=std::less<key> >  
 class bst{
 
   using pair_type =  typename std::pair<const key, value>;
   using node_type =  node<pair_type>;
   using iterator  =  __iterator<node<pair_type>, pair_type >;
-  using const_iterator = __iterator<node<pair_type>, const pair_type>;  //I create this cause I'm asked to create functions returning const iterator
+  using const_iterator = __iterator<node<pair_type>, const pair_type>;  
 
  private:
 
@@ -76,7 +76,7 @@ class bst{
 
 
   template<class... Types>  // variadic templates
-  std::pair<iterator,bool> emplace(Types&&... args) {        //function to call correctly insert (giving a pair_type as input)
+  std::pair<iterator,bool> emplace(Types&&... args) {        //function needed to correctly call insert (giving a pair_type as input)
     return insert(pair_type{std::forward<Types>(args)...});  //in this way, empace can bel called with just two arguments which must be consistent with key and value, i.e tree.emplace(5, 8.443)
   }
 
@@ -115,6 +115,16 @@ class bst{
   }
 
 
+
+  const_iterator end() const noexcept { //same implementation fo linked list
+    auto t = head.get();  //t will be a ptr to a node
+    while(t->right){
+      t=t->right.get();  //go right as you can
+	}
+    return const_iterator{t}; //call iterator ctor and return the iterator
+  }  
+    
+
   const iterator take_head() const noexcept{
     auto t=head.get();
     return const_iterator{t};
@@ -127,14 +137,6 @@ class bst{
 
 
 
-  const_iterator end() const noexcept { //same implementation fo linked list
-    auto t = head.get();  //t will be a ptr to a node
-    while(t->right){
-      t=t->right.get();  //go right as you can
-	}
-    return const_iterator{t}; //call iterator ctor and return the iterator
-  }  
-    
 
   iterator find(const key& x);
 		      
@@ -202,18 +204,18 @@ std::pair<__iterator<node<std::pair<const key,value>>, std::pair<const key,value
           return std::make_pair(iterator{t->left.get()},true) ;
         }
       }         
-      else if(less(t->value.first,x.first)){
+    else if(less(t->value.first,x.first)){
         if(t->right)
           t=t->right.get();
         else{
           t->right.reset(new node_type{std::forward<OT>(x),t}); //why std::move doesnt work here?
           return std::make_pair(iterator{t->right.get()},true) ;
         }
-      }
-      else return std::make_pair(iterator{t},false) ;
     }
+    else return std::make_pair(iterator{t},false) ;
+  }
 
-  head.reset(new node_type{std::forward<OT>(x), nullptr}) ;
+  head.reset(new node_type{std::forward<OT>(x), nullptr}) ; //empty tree case
   return std::make_pair(iterator{head.get()},true) ;
 
 }
@@ -242,7 +244,7 @@ __iterator<node<std::pair<const key, value>>, std::pair<const key,value>> bst<ke
     else
       return iterator{t}; 
     }
-  return iterator{nullptr};
+  return end();
 }
 
 
@@ -266,7 +268,7 @@ __iterator<node<std::pair<const key, value>>,const std::pair<const key,value>> b
     else
       return const_iterator{t}; 
     }
-  return const_iterator{nullptr};
+  return end();
 }
 
 
@@ -498,17 +500,14 @@ void bst<key,value,cmp>::erase_head(){
 	     }
 
 	     else{
-	       node_successor->right.reset(head.get()->right.release());
-	       head.reset(father_succ->left.release());
-	       //father_succ->left.reset();
+	       node_successor->right.reset(head.get()->right.release()); //the new head take is correct right child from old head
+	       head.reset(father_succ->left.release()); //set new head
 	     }
 	     
         
-	     (node_successor->right)->upper=node_successor;
-	
-	     //set the father of the node successor to be the father of the node_to_erase
+	     (node_successor->right)->upper=node_successor; //set remaining upper pointers correctly
 	     node_successor->upper=nullptr;
-	     //set the child of the father to node successor
+	   
         
       } 
     }               
