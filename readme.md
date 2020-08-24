@@ -25,5 +25,5 @@ In order to check that the program has no memory leaks, I used the command "valg
 
 I wrote the codes alone but helping myself with the code written by my collegues Iuri Macocco and Mattia Ubertini. 
 I used some of their functions trying to modify some parts and remove the parts I thought were useless. Sometimes this helped me out on uderstanding why this part I thought were useless were actually needed. In some cases I was able to find some bugs in their code and correct for them (for example I had to correct the erase_head() function).
-My goal was to exploit this exercise to learn and understand as much as possible about c++. I was able consolidate by knowledge about move and copy semantics usage, learn a lot of useful commands and keywords, achieve a better understanding on how to use unique pointers and on how let classes talk to each other. 
+My goal was to exploit this exercise to learn and understand as much as possible about c++. I was able consolidate by knowledge about move and copy semantics usage, learn a lot of useful commands and keywords, learn how to use functions in a recursive way, achieve a better understanding on how to use unique pointers and on how let classes talk to each other. 
 
