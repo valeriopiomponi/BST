@@ -13,9 +13,8 @@ all: $(EXE)
 	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 $(EXE): $(OBJ)
-	$(CXX) $^ -o $(EXE) $(LFLAGS)
-
-main.o: $(LIB) 
+	$(CXX) $^ -o $(EXE)
+ 
 
 clean:
 	rm -rf  main.o $(EXE) */*~ *~ 
